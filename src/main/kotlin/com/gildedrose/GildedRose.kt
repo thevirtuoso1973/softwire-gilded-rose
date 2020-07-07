@@ -29,7 +29,7 @@ class GildedRose(var items: Array<Item>, private val rate: Int = 1) {
                     //Note:
                     //Rate of increase was not specified for other items, but it was for tickets
                 }
-                "Conjured Mana Cake" -> {
+                items[i].name.startsWith("Conjured") -> {
                     items[i].quality = maxOf(items[i].quality - 2*rate,0)
                 }
                 else -> {
