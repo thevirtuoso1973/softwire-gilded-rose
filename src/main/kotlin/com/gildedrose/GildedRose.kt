@@ -3,6 +3,7 @@ package com.gildedrose
 class GildedRose(var items: Array<Item>) {
 
     fun updateQuality() {
+        //Decreasing quality before SellIn date is passed
         for (i in items.indices) {
             if (items[i].name != "Aged Brie" && items[i].name != "Backstage passes to a TAFKAL80ETC concert") {
                 if (items[i].quality > 0) {
@@ -35,7 +36,7 @@ class GildedRose(var items: Array<Item>) {
                 items[i].sellIn = items[i].sellIn - 1
             }
 
-            //Decreasing quality after passing SellIn date
+            //Extra decrease in quality after passing SellIn date
             if (items[i].sellIn < 0) {
                 when (items[i].name) {
                     "Aged Brie" -> {if (items[i].quality < 50) {
