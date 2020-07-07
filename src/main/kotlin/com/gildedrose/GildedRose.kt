@@ -1,9 +1,6 @@
 package com.gildedrose
 
-import kotlin.concurrent.fixedRateTimer
-import kotlin.math.max
-
-class GildedRose(var items: Array<Item>, val rate: Int = 1) {
+class GildedRose(var items: Array<Item>, private val rate: Int = 1) {
 
     fun updateQuality() {
         //Decreasing quality before SellIn date is passed
