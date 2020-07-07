@@ -18,7 +18,7 @@ import org.junit.Test
 
 
 class GildedRoseTest {
-    private val sellByItems = arrayOf(Item("foo", -1, 4))
+    private val testItems = arrayOf(Item("foo", -1, 4))
 
     @Test fun foo() {
         val items = arrayOf<Item>(Item("foo", 0, 0))
@@ -39,8 +39,12 @@ class GildedRoseTest {
 
     @Test fun `if sell by date passed, then degrades twice the rate`() {
         val qualityRate = 1
-        for (item in sellByItems) {
-            if (item.sellIn < 0) {
+        for (item in testItems) {
+            if (
+                    item.sellIn < 0
+                    && !item.name.startsWith("Aged Brie")
+                    && !item.name.startsWith("Sulfuras")
+            ) {
                 val initQuality = item.quality
                 val app = GildedRose(arrayOf(item), qualityRate)
                 app.updateQuality()
@@ -50,11 +54,12 @@ class GildedRoseTest {
     }
 
     @Test fun nonNegativeQuality() {
-        val name = "foo"; val daysLeft = 2; val initQuality = 0
-        val items = arrayOf<Item>(Item(name, daysLeft, initQuality))
-        val app = GildedRose(items)
-        app.updateQuality()
-        assertEquals(0, app.items[0].quality)
+        val qualityRate = 1
+        for (item in testItems) {
+            val app = GildedRose(arrayOf(item), qualityRate)
+            app.updateQuality()
+            assert(app.items[0].quality >= 0)
+        }
     }
 
     @Test fun agedBrieQualityIncrease() {
