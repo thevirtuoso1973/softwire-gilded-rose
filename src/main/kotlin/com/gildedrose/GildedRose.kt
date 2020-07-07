@@ -1,21 +1,18 @@
 package com.gildedrose
 
-import kotlin.concurrent.fixedRateTimer
-import kotlin.math.max
-
-class GildedRose(var items: Array<Item>, val rate: Int = 1) {
+class GildedRose(var items: Array<Item>, private val rate: Int = 1) {
 
     fun updateQuality() {
         //Decreasing quality before SellIn date is passed
         for (i in items.indices) {
-            when (items[i].name) {
-                "Sulfuras, Hand of Ragnaros" -> {
+            when {
+                items[i].name.startsWith("Sulfuras") -> {
                     items[i].quality = items[i].quality
                 }
-                "Aged Brie" -> {
+                items[i].name.startsWith("Aged Brie") -> {
                     items[i].quality = minOf(items[i].quality + rate,50)
                 }
-                "Backstage passes to a TAFKAL80ETC concert" -> {
+                items[i].name.startsWith("Backstage passes") -> {
                     if (items[i].quality < 50) {
                         items[i].quality = items[i].quality + 1
                     }
@@ -43,23 +40,23 @@ class GildedRose(var items: Array<Item>, val rate: Int = 1) {
             }
 
             // Decreasing SellIn date except for Sulfuras
-            if (items[i].name != "Sulfuras, Hand of Ragnaros") {
+            if (!items[i].name.startsWith("Sulfuras")) {
                 items[i].sellIn = items[i].sellIn - 1
             }
 
             //Extra decrease in quality after passing SellIn date
             if (items[i].sellIn < 0) {
-                when (items[i].name) {
-                    "Sulfuras, Hand of Ragnaros" -> {
+                when {
+                    items[i].name.startsWith("Sulfuras") -> {
                         items[i].quality = items[i].quality
                     }
-                    "Aged Brie" -> {
+                    items[i].name.startsWith("Aged Brie") -> {
                         items[i].quality = minOf(items[i].quality + rate, 50)
                     }
-                    "Backstage passes to a TAFKAL80ETC concert" -> {
+                    items[i].name.startsWith("Backstage passes") -> {
                         items[i].quality = 0
                     }
-                    "Conjured Mana Cake" -> {
+                    items[i].name.startsWith("Conjured") -> {
                         items[i].quality = maxOf(items[i].quality - 2 * rate, 0)
                     }
                     else -> {
