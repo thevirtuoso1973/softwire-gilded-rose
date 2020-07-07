@@ -38,7 +38,7 @@ class GildedRose(var items: Array<Item>, val rate: Int = 1) {
             //Extra decrease in quality after passing SellIn date
             if (items[i].sellIn < 0) {
                 when (items[i].name) {
-                    "Aged Brie" -> {items[i].quality = items[i].quality}
+                    "Aged Brie" -> {items[i].quality = items[i].quality + 1}
                     "Backstage passes to a TAFKAL80ETC concert" -> {items[i].quality = 0}
                     "Sulfuras, Hand of Ragnaros" -> {items[i].quality = items[i].quality}
                     else -> {if (items[i].quality > 0) {
