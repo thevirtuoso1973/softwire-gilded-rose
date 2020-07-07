@@ -6,14 +6,19 @@ import org.junit.Test
 
 /*
     For Chris:
-    - Once the sell by date has passed, Quality degrades twice as fast
-    - The Quality of an item is never negative
-    - “Aged Brie” actually increases in Quality the older it gets
-    TODO: automate/parameterize it?
+    1. Once the sell by date has passed, Quality degrades twice as fast
+    2. The Quality of an item is never negative
+    3. “Aged Brie” actually increases in Quality the older it gets
+
+    TODO:
+     - automate/parameterize it somehow?
+     - add conjure support (last bullet point)
+     - add rate attribute to GildedRose (avoid literal)
  */
 
 
 class GildedRoseTest {
+    private val sellByItems = arrayOf(Item("foo", -1, 4))
 
     @Test fun foo() {
         val items = arrayOf<Item>(Item("foo", 0, 0))
@@ -33,11 +38,15 @@ class GildedRoseTest {
     }
 
     @Test fun `if sell by date passed, then degrades twice the rate`() {
-        val name = "foo"; val daysLeft = 0; val initQuality = 4
-        val items = arrayOf<Item>(Item(name, daysLeft, initQuality))
-        val app = GildedRose(items)
-        app.updateQuality()
-        assertEquals(initQuality-2, app.items[0].quality)
+        val qualityRate = 1
+        for (item in sellByItems) {
+            if (item.sellIn < 0) {
+                val initQuality = item.quality
+                val app = GildedRose(arrayOf(item), qualityRate)
+                app.updateQuality()
+                assertEquals(initQuality-(2*qualityRate), app.items[0].quality)
+            }
+        }
     }
 
     @Test fun nonNegativeQuality() {
