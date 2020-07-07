@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
     val app = GildedRose(items)
 
     var days = 2
-    if (args.size > 0) {
+    if (args.isNotEmpty()) {
         days = Integer.parseInt(args[0]) + 1
     }
 
@@ -31,6 +31,4 @@ fun main(args: Array<String>) {
         println()
         app.updateQuality()
     }
-
-
 }
