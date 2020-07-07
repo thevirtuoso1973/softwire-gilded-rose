@@ -13,7 +13,7 @@ class GildedRose(var items: Array<Item>, val rate: Int = 1) {
                     items[i].quality = items[i].quality
                 }
                 "Aged Brie" -> {
-                    items[i].quality = maxOf(items[i].quality + rate,50)
+                    items[i].quality = minOf(items[i].quality + rate,50)
                 }
                 "Backstage passes to a TAFKAL80ETC concert" -> {
                     if (items[i].quality < 50) {
@@ -54,16 +54,16 @@ class GildedRose(var items: Array<Item>, val rate: Int = 1) {
                         items[i].quality = items[i].quality
                     }
                     "Aged Brie" -> {
-                        items[i].quality = maxOf(items[i].quality + rate, 50)
+                        items[i].quality = minOf(items[i].quality + rate, 50)
                     }
                     "Backstage passes to a TAFKAL80ETC concert" -> {
                         items[i].quality = 0
                     }
                     "Conjured Mana Cake" -> {
-                        items[i].quality = minOf(items[i].quality - 2 * rate, 0)
+                        items[i].quality = maxOf(items[i].quality - 2 * rate, 0)
                     }
                     else -> {
-                        items[i].quality = minOf(items[i].quality - rate, 0)
+                        items[i].quality = maxOf(items[i].quality - rate, 0)
                     }
                 }
             }
