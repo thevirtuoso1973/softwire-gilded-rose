@@ -22,7 +22,7 @@ fun main(args: Array<String>) {
         days = Integer.parseInt(args[0]) + 1
     }
 
-    for (i in 0..days - 1) {
+    for (i in 0 until days) {
         println("-------- day $i --------")
         println("name, sellIn, quality")
         for (item in items) {
