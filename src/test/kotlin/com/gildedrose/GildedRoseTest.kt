@@ -53,18 +53,18 @@ class GildedRoseTest {
                 val initQuality = item.quality
                 val app = GildedRose(arrayOf(item), qualityRate)
                 app.updateQuality()
-<<<<<<< HEAD
+
+
                 if (item.name.startsWith("Conjured")) {
                     assertEquals(maxOf(initQuality-(4*qualityRate),0), app.items[0].quality)
                 } else {
                     assertEquals(maxOf(initQuality-(2*qualityRate),0), app.items[0].quality)
                 }
-=======
+
                 assertEquals(max(0,
                         initQuality -
                                 ((if (item.name.startsWith("Conjured")) 4 else 2) * qualityRate)),
                         app.items[0].quality)
->>>>>>> a28a1a961c5490930055d3a1694377e5b945fb52
             }
         }
     }
@@ -88,7 +88,6 @@ class GildedRoseTest {
                 val app = GildedRose(arrayOf(item), qualityRate)
                 app.updateQuality()
                 if (item.sellIn < 0) {
-<<<<<<< HEAD
                     assertEquals(minOf(initQuality+(2*qualityRate),50), app.items[0].quality)
                 } else {
                     assertEquals(minOf(initQuality+qualityRate,50), app.items[0].quality)
@@ -133,11 +132,6 @@ class GildedRoseTest {
                     (finSellIn <= 10 && finSellIn > 5) -> assertEquals(finQuality, minOf(initQuality + 2,50))
                     (finSellIn <= 5 && finQuality > 0) -> assertEquals(finQuality,minOf(initQuality + 3,50))
                     (finSellIn <= 0) -> assertEquals(finQuality,0)
-=======
-                    assertEquals(initQuality + (2 * qualityRate), app.items[0].quality)
-                } else {
-                    assertEquals(initQuality + qualityRate, app.items[0].quality)
->>>>>>> a28a1a961c5490930055d3a1694377e5b945fb52
                 }
             }
         }
