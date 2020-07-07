@@ -33,10 +33,10 @@ class GildedRose(var items: Array<Item>, val rate: Int = 1) {
                     //Rate of increase was not specified for other items, but it was for tickets
                 }
                 "Conjured Mana Cake" -> {
-                    items[i].quality = minOf(items[i].quality - 2*rate,0)
+                    items[i].quality = maxOf(items[i].quality - 2*rate,0)
                 }
                 else -> {
-                    items[i].quality = minOf(items[i].quality - rate,0)
+                    items[i].quality = maxOf(items[i].quality - rate,0)
                 }
 
 
