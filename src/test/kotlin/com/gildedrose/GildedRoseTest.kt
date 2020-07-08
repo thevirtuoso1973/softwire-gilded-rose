@@ -4,15 +4,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.lang.Integer.max
 
-
-/*
-    Chris' tests:
-    1. Once the sell by date has passed, Quality degrades twice as fast
-    2. The Quality of an item is never negative
-    3. “Aged Brie” actually increases in Quality the older it gets
- */
-
-
 class GildedRoseTest {
     private val testItems = arrayOf(
             Item("foo", -1, 4),
@@ -69,6 +60,20 @@ class GildedRoseTest {
         }
     }
 
+    //SellIn Tests:
+
+    @Test
+    fun sellInDecrease() {
+        val qualityRate = 1
+        for (item in testItems) {
+            val app = GildedRose(arrayOf(item), qualityRate)
+            val initSellIn = item.sellIn
+            app.updateQuality()
+            if (!item.name.startsWith("Sulfuras"))
+            assertEquals(app.items[0].sellIn,initSellIn-1)
+        }
+    }
+
     //Quality Bound Tests:
 
     @Test
@@ -122,8 +127,6 @@ class GildedRoseTest {
             }
         }
     }
-
-
 
     //Sulfuras Tests:
 
@@ -209,6 +212,38 @@ class GildedRoseTest {
                 app.updateQuality()
                 if (app.items[0].sellIn < 0) {
                     assertEquals(app.items[0].quality,0)
+                }
+            }
+        }
+    }
+
+    //Conjured Item Tests:
+
+    @Test
+    fun conjuredQualityPreSellIn() {
+        val qualityRate = 1
+        for (item in testItems) {
+            if (item.name.startsWith("Conjured")) {
+                val initQuality = item.quality
+                val app = GildedRose(arrayOf(item),qualityRate)
+                app.updateQuality()
+                if (app.items[0].sellIn >= 0) {
+                    assertEquals(app.items[0].quality, maxOf(initQuality - 2*qualityRate,0))
+                }
+            }
+        }
+    }
+
+    @Test
+    fun conjuredQualityPostSellIn() {
+        val qualityRate = 1
+        for (item in testItems) {
+            if (item.name.startsWith("Conjured")) {
+                val initQuality = item.quality
+                val app = GildedRose(arrayOf(item),qualityRate)
+                app.updateQuality()
+                if (app.items[0].sellIn < 0) {
+                    assertEquals(app.items[0].quality, maxOf(initQuality - 4*qualityRate,0))
                 }
             }
         }
