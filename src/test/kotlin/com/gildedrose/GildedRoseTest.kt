@@ -164,7 +164,7 @@ class GildedRoseTest {
                 val initQuality = item.quality
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
-                if (app.items[0].sellIn > 10) {
+                if (app.items[0].sellIn >= 10) {
                     assertEquals(app.items[0].quality,minOf(initQuality+1,50))
                 }
             }
@@ -179,7 +179,7 @@ class GildedRoseTest {
                 val initQuality = item.quality
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
-                if (app.items[0].sellIn in 6..10) {
+                if (app.items[0].sellIn in 5..9) {
                     assertEquals(app.items[0].quality, minOf(initQuality + 2,50))
                 }
             }
@@ -194,7 +194,7 @@ class GildedRoseTest {
                 val initQuality = item.quality
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
-                if (app.items[0].sellIn in 0..5) {
+                if (app.items[0].sellIn in 0..4) {
                     assertEquals(app.items[0].quality, minOf(initQuality + 3,50))
                 }
             }
