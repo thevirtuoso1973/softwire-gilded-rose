@@ -2,7 +2,6 @@ package com.gildedrose
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.lang.Integer.max
 
 class GildedRoseTest {
     private val testItems = arrayOf(
@@ -18,47 +17,6 @@ class GildedRoseTest {
             Item("Conjured Mana Cake", 3, 6),
             Item("Conjured Mana Cake", -1, 6)
     )
-
-    @Test
-    fun trivial() { // just a sanity check
-        val name = "bar"
-        val daysLeft = 1
-        val initQuality = 1
-        val items = arrayOf(Item(name, daysLeft, initQuality))
-        val app = GildedRose(items)
-        app.updateQuality()
-        assertEquals(name, app.items[0].name)
-        assertEquals(daysLeft - 1, app.items[0].sellIn)
-        assertEquals(initQuality - 1, app.items[0].quality)
-    }
-
-    @Test
-    fun `if sell by date passed, then degrades twice the rate`() {
-        val qualityRate = 1
-        for (item in testItems) {
-            if (
-                    item.sellIn < 0
-                    && !item.name.startsWith("Aged Brie")
-                    && !item.name.startsWith("Sulfuras")
-            ) {
-                val initQuality = item.quality
-                val app = GildedRose(arrayOf(item), qualityRate)
-                app.updateQuality()
-
-
-                if (item.name.startsWith("Conjured")) {
-                    assertEquals(maxOf(initQuality-(4*qualityRate),0), app.items[0].quality)
-                } else {
-                    assertEquals(maxOf(initQuality-(2*qualityRate),0), app.items[0].quality)
-                }
-
-                assertEquals(max(0,
-                        initQuality -
-                                ((if (item.name.startsWith("Conjured")) 4 else 2) * qualityRate)),
-                        app.items[0].quality)
-            }
-        }
-    }
 
     //SellIn Tests:
 
@@ -93,6 +51,46 @@ class GildedRoseTest {
             val app = GildedRose(arrayOf(item), qualityRate)
             app.updateQuality()
             assert(app.items[0].quality <= 50)
+        }
+    }
+
+    //General Quality Decrease Tests
+
+    @Test
+    fun generalQualityDecreasePreSellIn() {
+        val qualityRate = 1
+        for (item in testItems) {
+            if (
+                    item.sellIn > 0
+                    && !item.name.startsWith("Aged Brie")
+                    && !item.name.startsWith("Sulfuras")
+                    && !item.name.startsWith("Backstage")
+                    && !item.name.startsWith("Conjured")
+            ) {
+                val initQuality = item.quality
+                val app = GildedRose(arrayOf(item), qualityRate)
+                app.updateQuality()
+                assertEquals(maxOf(initQuality-qualityRate,0), app.items[0].quality)
+            }
+        }
+    }
+
+    @Test
+    fun generalQualityDecreasePostSellIn() {
+        val qualityRate = 1
+        for (item in testItems) {
+            if (
+                    item.sellIn <= 0
+                    && !item.name.startsWith("Aged Brie")
+                    && !item.name.startsWith("Sulfuras")
+                    && !item.name.startsWith("Backstage")
+                    && !item.name.startsWith("Conjured")
+            ) {
+                val initQuality = item.quality
+                val app = GildedRose(arrayOf(item), qualityRate)
+                app.updateQuality()
+                assertEquals(maxOf(initQuality-2*qualityRate,0), app.items[0].quality)
+            }
         }
     }
 
@@ -162,7 +160,7 @@ class GildedRoseTest {
     fun backstagePassQualityWhenSellInMoreThan10Days() {
         val qualityRate = 1
         for (item in testItems) {
-            if (item.name.startsWith("Backstage pass")) {
+            if (item.name.startsWith("Backstage")) {
                 val initQuality = item.quality
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
@@ -177,7 +175,7 @@ class GildedRoseTest {
     fun backstagePassQualityWhenSellInBetween5to10Days() {
         val qualityRate = 1
         for (item in testItems) {
-            if (item.name.startsWith("Backstage pass")) {
+            if (item.name.startsWith("Backstage")) {
                 val initQuality = item.quality
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
@@ -192,7 +190,7 @@ class GildedRoseTest {
     fun backstagePassQualityWhenSellInBetween0to5Days() {
         val qualityRate = 1
         for (item in testItems) {
-            if (item.name.startsWith("Backstage pass")) {
+            if (item.name.startsWith("Backstage")) {
                 val initQuality = item.quality
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
@@ -207,7 +205,7 @@ class GildedRoseTest {
     fun backstagePassQualityWhenPostSellIn() {
         val qualityRate = 1
         for (item in testItems) {
-            if (item.name.startsWith("Backstage pass")) {
+            if (item.name.startsWith("Backstage")) {
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
                 if (app.items[0].sellIn < 0) {
@@ -228,7 +226,7 @@ class GildedRoseTest {
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
                 if (app.items[0].sellIn >= 0) {
-                    assertEquals(app.items[0].quality, maxOf(initQuality - 2*qualityRate,0))
+                    assertEquals(app.items[0].quality, maxOf(initQuality - (2*qualityRate),0))
                 }
             }
         }
@@ -243,7 +241,7 @@ class GildedRoseTest {
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
                 if (app.items[0].sellIn < 0) {
-                    assertEquals(app.items[0].quality, maxOf(initQuality - 4*qualityRate,0))
+                    assertEquals(app.items[0].quality, maxOf(initQuality - (4*qualityRate),0))
                 }
             }
         }
