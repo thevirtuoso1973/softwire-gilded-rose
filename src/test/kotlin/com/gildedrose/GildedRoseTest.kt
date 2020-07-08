@@ -69,6 +69,8 @@ class GildedRoseTest {
         }
     }
 
+    //Quality Bound Tests:
+
     @Test
     fun nonNegativeQuality() {
         val qualityRate = 1
@@ -76,23 +78,6 @@ class GildedRoseTest {
             val app = GildedRose(arrayOf(item), qualityRate)
             app.updateQuality()
             assert(app.items[0].quality >= 0)
-        }
-    }
-
-    @Test
-    fun agedBrieQualityIncrease() {
-        val qualityRate = 1
-        for (item in testItems) {
-            if (item.name.startsWith("Aged Brie")) {
-                val initQuality = item.quality
-                val app = GildedRose(arrayOf(item), qualityRate)
-                app.updateQuality()
-                if (item.sellIn < 0) {
-                    assertEquals(minOf(initQuality+(2*qualityRate),50), app.items[0].quality)
-                } else {
-                    assertEquals(minOf(initQuality+qualityRate,50), app.items[0].quality)
-                }
-            }
         }
     }
 
@@ -105,6 +90,42 @@ class GildedRoseTest {
             assert(app.items[0].quality <= 50)
         }
     }
+
+    //Aged Brie Tests:
+
+    @Test
+    fun agedBrieQualityIncreasePostSellIn() {
+        val qualityRate = 1
+        for (item in testItems) {
+            if (item.name.startsWith("Aged Brie")) {
+                val initQuality = item.quality
+                val app = GildedRose(arrayOf(item), qualityRate)
+                app.updateQuality()
+                if (item.sellIn < 0) {
+                    assertEquals(minOf(initQuality+(2*qualityRate),50), app.items[0].quality)
+                }
+            }
+        }
+    }
+
+    @Test
+    fun agedBrieQualityIncreasePreSellIn() {
+        val qualityRate = 1
+        for (item in testItems) {
+            if (item.name.startsWith("Aged Brie")) {
+                val initQuality = item.quality
+                val app = GildedRose(arrayOf(item), qualityRate)
+                app.updateQuality()
+                if (item.sellIn >= 0) {
+                    assertEquals(minOf(initQuality+qualityRate,50), app.items[0].quality)
+                }
+            }
+        }
+    }
+
+
+
+    //Sulfuras Tests:
 
     @Test
     fun sulfurasQualityNoChange() {
@@ -131,6 +152,8 @@ class GildedRoseTest {
             }
         }
     }
+
+    //Backstage Passes Tests:
 
     @Test
     fun backstagePassQualityWhenSellInMoreThan10Days() {
@@ -170,7 +193,7 @@ class GildedRoseTest {
                 val initQuality = item.quality
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
-                if (app.items[0].sellIn in 1..5) {
+                if (app.items[0].sellIn in 0..5) {
                     assertEquals(app.items[0].quality, minOf(initQuality + 3,50))
                 }
             }
@@ -184,7 +207,7 @@ class GildedRoseTest {
             if (item.name.startsWith("Backstage pass")) {
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
-                if (app.items[0].sellIn <= 0) {
+                if (app.items[0].sellIn < 0) {
                     assertEquals(app.items[0].quality,0)
                 }
             }
