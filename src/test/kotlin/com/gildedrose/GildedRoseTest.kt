@@ -33,7 +33,7 @@ class GildedRoseTest {
         val name = "bar"
         val daysLeft = 1
         val initQuality = 1
-        val items = arrayOf<Item>(Item(name, daysLeft, initQuality))
+        val items = arrayOf(Item(name, daysLeft, initQuality))
         val app = GildedRose(items)
         app.updateQuality()
         assertEquals(name, app.items[0].name)
@@ -96,7 +96,8 @@ class GildedRoseTest {
         }
     }
 
-    @Test fun maxQuality50() {
+    @Test
+    fun maxQuality50() {
         val qualityRate = 1
         for (item in testItems) {
             val app = GildedRose(arrayOf(item), qualityRate)
@@ -105,33 +106,86 @@ class GildedRoseTest {
         }
     }
 
-    @Test fun SulfurasProperties() {
+    @Test
+    fun sulfurasQualityNoChange() {
         val qualityRate = 1
         for (item in testItems) {
             if (item.name.startsWith("Sulfuras")) {
                 val initQuality = item.quality
-                val initSellIn = item.sellIn
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
-                assert(app.items[0].quality == initQuality && app.items[0].sellIn == initSellIn)
+                assert(app.items[0].quality == initQuality)
             }
         }
     }
 
-    @Test fun BackstagePassProperties() {
+    @Test
+    fun sulfurasSellInNoChange() {
+        val qualityRate = 1
+        for (item in testItems) {
+            if (item.name.startsWith("Sulfuras")) {
+                val initSellIn = item.sellIn
+                val app = GildedRose(arrayOf(item),qualityRate)
+                app.updateQuality()
+                assert(app.items[0].sellIn == initSellIn)
+            }
+        }
+    }
+
+    @Test
+    fun backstagePassQualityWhenSellInMoreThan10Days() {
         val qualityRate = 1
         for (item in testItems) {
             if (item.name.startsWith("Backstage pass")) {
                 val initQuality = item.quality
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
-                val finQuality = app.items[0].quality
-                val finSellIn = app.items[0].sellIn
-                when {
-                    (finSellIn > 10) -> assertEquals(finQuality,minOf(initQuality+1,50))
-                    (finSellIn <= 10 && finSellIn > 5) -> assertEquals(finQuality, minOf(initQuality + 2,50))
-                    (finSellIn <= 5 && finQuality > 0) -> assertEquals(finQuality,minOf(initQuality + 3,50))
-                    (finSellIn <= 0) -> assertEquals(finQuality,0)
+                if (app.items[0].sellIn > 10) {
+                    assertEquals(app.items[0].quality,minOf(initQuality+1,50))
+                }
+            }
+        }
+    }
+
+    @Test
+    fun backstagePassQualityWhenSellInBetween5to10Days() {
+        val qualityRate = 1
+        for (item in testItems) {
+            if (item.name.startsWith("Backstage pass")) {
+                val initQuality = item.quality
+                val app = GildedRose(arrayOf(item),qualityRate)
+                app.updateQuality()
+                if (app.items[0].sellIn in 6..10) {
+                    assertEquals(app.items[0].quality, minOf(initQuality + 2,50))
+                }
+            }
+        }
+    }
+
+    @Test
+    fun backstagePassQualityWhenSellInBetween0to5Days() {
+        val qualityRate = 1
+        for (item in testItems) {
+            if (item.name.startsWith("Backstage pass")) {
+                val initQuality = item.quality
+                val app = GildedRose(arrayOf(item),qualityRate)
+                app.updateQuality()
+                if (app.items[0].sellIn in 1..5) {
+                    assertEquals(app.items[0].quality, minOf(initQuality + 3,50))
+                }
+            }
+        }
+    }
+
+    @Test
+    fun backstagePassQualityWhenPostSellIn() {
+        val qualityRate = 1
+        for (item in testItems) {
+            if (item.name.startsWith("Backstage pass")) {
+                val app = GildedRose(arrayOf(item),qualityRate)
+                app.updateQuality()
+                if (app.items[0].sellIn <= 0) {
+                    assertEquals(app.items[0].quality,0)
                 }
             }
         }
