@@ -162,9 +162,10 @@ class GildedRoseTest {
         for (item in testItems) {
             if (item.name.startsWith("Backstage")) {
                 val initQuality = item.quality
-                val app = GildedRose(arrayOf(item),qualityRate)
-                app.updateQuality()
-                if (app.items[0].sellIn >= 10) {
+                val initSellin = item.sellIn
+                if (initSellin > 10) {
+                    val app = GildedRose(arrayOf(item),qualityRate)
+                    app.updateQuality()
                     assertEquals(app.items[0].quality,minOf(initQuality+1,50))
                 }
             }
@@ -177,9 +178,10 @@ class GildedRoseTest {
         for (item in testItems) {
             if (item.name.startsWith("Backstage")) {
                 val initQuality = item.quality
-                val app = GildedRose(arrayOf(item),qualityRate)
-                app.updateQuality()
-                if (app.items[0].sellIn in 5..9) {
+                val initSellin = item.sellIn
+                if (initSellin in 5..10) {
+                    val app = GildedRose(arrayOf(item),qualityRate)
+                    app.updateQuality()
                     assertEquals(app.items[0].quality, minOf(initQuality + 2,50))
                 }
             }
@@ -192,9 +194,10 @@ class GildedRoseTest {
         for (item in testItems) {
             if (item.name.startsWith("Backstage")) {
                 val initQuality = item.quality
+                val initSellin = item.sellIn
                 val app = GildedRose(arrayOf(item),qualityRate)
                 app.updateQuality()
-                if (app.items[0].sellIn in 0..4) {
+                if (initSellin in 0..5) {
                     assertEquals(app.items[0].quality, minOf(initQuality + 3,50))
                 }
             }

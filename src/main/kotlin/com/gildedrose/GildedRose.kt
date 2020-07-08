@@ -10,7 +10,7 @@ class GildedRose(var items: Array<Item>, private val rate: Int = 1) {
     }
 
     private fun isBackstagePass(name: String): Boolean {
-        return name.startsWith("Backstage Passes")
+        return name.startsWith("Backstage passes")
     }
 
     private fun isConjured(name: String): Boolean {
