@@ -54,7 +54,7 @@ class GildedRoseTest {
         }
     }
 
-    //General Quality Decrease Tests
+    //General Item Quality Decrease Tests
 
     @Test
     fun generalQualityDecreasePreSellIn() {
