@@ -101,7 +101,7 @@ class GildedRoseTest {
         for (item in testItems) {
             val app = GildedRose(arrayOf(item), qualityRate)
             app.updateQuality()
-            assert(app.items[0].quality < 50)
+            assert(app.items[0].quality <= 50)
         }
     }
 
